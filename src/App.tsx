@@ -4,16 +4,16 @@ import { useSoundEngine } from './hooks/useSoundEngine';
 import { SplashScreen } from './components/SplashScreen';
 import { GameScene } from './components/GameScene';
 import { OutcomeScreen } from './components/OutcomeScreen';
+import { ComparisonScreen } from './components/ComparisonScreen';
 
 export default function App() {
-  const { state, startGame, tick, decide, clearFeedback, nextTeam } = useGameState();
+  const { state, startGame, tick, decide, clearFeedback, nextTeam, showComparison, nextRound } = useGameState();
   const sounds = useSoundEngine();
 
-  // Team 1 is first to play; after each round scores grows by 1
   const nextTeamNumber = state.scores.length + 1;
 
   return (
-    <div className="w-full h-full" style={{ background: '#0b0e1a' }}>
+    <div className="w-full h-full" style={{ background: '#111827' }}>
       <AnimatePresence mode="wait">
         {state.phase === 'splash' && (
           <motion.div
@@ -59,8 +59,22 @@ export default function App() {
             <OutcomeScreen
               state={state}
               onNextTeam={nextTeam}
+              onShowComparison={showComparison}
               sounds={sounds}
             />
+          </motion.div>
+        )}
+
+        {state.phase === 'comparison' && (
+          <motion.div
+            key="comparison"
+            className="absolute inset-0"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ComparisonScreen scores={state.scores} onNextRound={nextRound} />
           </motion.div>
         )}
       </AnimatePresence>

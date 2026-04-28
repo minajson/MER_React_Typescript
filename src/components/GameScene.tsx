@@ -32,21 +32,18 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
   const isUrgent = state.timeRemaining <= 60;
   const isCritical = state.timeRemaining <= 30;
 
-  // Timer tick
   useEffect(() => {
     if (state.showFeedback) return;
     const id = setInterval(onTick, 1000);
     return () => clearInterval(id);
   }, [onTick, state.showFeedback]);
 
-  // Heartbeat BPM tied to health
   useEffect(() => {
     const bpm = state.healthStatus === 'green' ? 72 : state.healthStatus === 'yellow' ? 100 : 140;
     sounds.startHeartbeat(bpm);
     return () => sounds.stopHeartbeat();
   }, [state.healthStatus, sounds.startHeartbeat, sounds.stopHeartbeat]);
 
-  // Alarm in critical state
   useEffect(() => {
     if (isCritical || state.healthStatus === 'red') {
       sounds.startAlarm();
@@ -70,16 +67,13 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
 
   return (
     <div
-      className={`relative w-full h-full flex flex-col overflow-hidden
-        ${isCritical ? 'border-2 border-red-900' : ''}`}
-      style={{ background: '#0b0e1a' }}
+      className={`relative w-full h-full flex flex-col overflow-hidden ${isCritical ? 'border-2 border-red-900' : ''}`}
+      style={{ background: '#111827' }}
     >
-      {/* Overlays */}
       <div className="crt-overlay absolute inset-0 z-10 pointer-events-none" />
       <div className="vignette absolute inset-0 z-10 pointer-events-none" />
       {isCritical && <div className="scan-line z-20" />}
 
-      {/* Feedback */}
       <FeedbackOverlay
         show={state.showFeedback}
         message={state.feedbackMessage}
@@ -87,10 +81,10 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
         onDismiss={onClearFeedback}
       />
 
-      {/* ── Header ─────────────────────────────────────────────────────── */}
+      {/* ── Header ──────────────────────────────────────────────────── */}
       <div
-        className="relative z-30 flex items-center justify-between px-5 md:px-8 py-4 border-b border-gray-800"
-        style={{ background: '#0e1220' }}
+        className="relative z-30 flex items-center justify-between px-5 md:px-8 py-3 border-b border-gray-800"
+        style={{ background: '#1c2436' }}
       >
         <Timer seconds={state.timeRemaining} />
 
@@ -98,28 +92,28 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
           <div className={`font-display text-xl md:text-3xl font-black tracking-widest glow-red ${isCritical ? 'pulse-red' : ''} text-red-500`}>
             MER
           </div>
-          <div className="font-body text-[10px] md:text-xs text-gray-600 tracking-widest uppercase hidden md:block">
-            Medical Emergency Response
+          <div className="font-body text-[10px] text-green-700 tracking-widest uppercase">
+            Renaissance OH
           </div>
-          <div className="font-body text-xs text-gray-600 tracking-widest mt-0.5">
-            SET {state.sceneset}
+          <div className="font-body text-[10px] text-gray-600 tracking-widest">
+            Scenario {state.sceneset}
           </div>
         </div>
 
         <HealthIndicator status={state.healthStatus} value={state.health} />
       </div>
 
-      {/* ── ECG strip ──────────────────────────────────────────────────── */}
-      <div className="relative z-30 px-5 md:px-8 py-2 border-b border-gray-800" style={{ background: '#0e1220' }}>
+      {/* ── ECG ─────────────────────────────────────────────────────── */}
+      <div className="relative z-30 px-5 md:px-8 py-2 border-b border-gray-800" style={{ background: '#1c2436' }}>
         <ECGDisplay status={state.healthStatus} />
       </div>
 
-      {/* ── Scene progress ─────────────────────────────────────────────── */}
-      <div className="relative z-30 px-5 md:px-8 py-3 border-b border-gray-800" style={{ background: '#0e1220' }}>
+      {/* ── Progress ─────────────────────────────────────────────────── */}
+      <div className="relative z-30 px-5 md:px-8 py-3 border-b border-gray-800" style={{ background: '#1c2436' }}>
         <SceneProgress currentIndex={sceneIndex} />
       </div>
 
-      {/* ── Scene content ──────────────────────────────────────────────── */}
+      {/* ── Scene content ─────────────────────────────────────────────── */}
       <AnimatePresence mode="wait">
         <motion.div
           key={state.currentScene}
@@ -155,10 +149,10 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
           {/* Narrative */}
           <motion.div
             className="border border-gray-700 rounded-xl p-5 md:p-6"
-            style={{ background: '#111520' }}
+            style={{ background: '#1c2436' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.15 }}
           >
             <p className="font-body text-gray-100 text-base md:text-xl leading-relaxed">
               {scene.narrative}
@@ -176,10 +170,10 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Footer ─────────────────────────────────────────────────────── */}
+      {/* ── Footer ───────────────────────────────────────────────────── */}
       <div
         className="relative z-30 px-5 md:px-8 py-3 border-t border-gray-800 flex items-center justify-between"
-        style={{ background: '#0e1220' }}
+        style={{ background: '#1c2436' }}
       >
         <span className="font-body text-sm text-gray-600 tracking-widest">
           TEAM: <span className="text-gray-400 font-semibold">{state.teamName}</span>
@@ -188,7 +182,7 @@ export function GameScene({ state, onTick, onDecide, onClearFeedback, sounds }: 
           {state.correctCount}/{state.totalDecisions} CORRECT
         </span>
         <span className="font-body text-sm text-gray-600 tracking-widest">
-          SCENE {sceneIndex + 1} / {SCENE_ORDER.length - 1}
+          Q{sceneIndex + 1} / {SCENE_ORDER.length - 1}
         </span>
       </div>
     </div>

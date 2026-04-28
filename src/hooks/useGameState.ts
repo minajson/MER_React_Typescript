@@ -2,7 +2,7 @@ import { useReducer, useCallback } from 'react';
 import type { GameState, HealthStatus, OutcomeType, TeamScore } from '../types';
 import { getScenesForSet } from '../data/scenes';
 
-const INITIAL_TIME = 300;  // 5 minutes
+const INITIAL_TIME = 180;  // 3 minutes
 const INITIAL_HEALTH = 80;
 
 function healthToStatus(h: number): HealthStatus {
@@ -54,7 +54,7 @@ const initialState: GameState = {
 
 function makeScore(
   state: GameState,
-  health: number,
+  _health: number,
   healthStatus: HealthStatus,
   timeRemaining: number,
   correctCount: number,

@@ -13,51 +13,52 @@ export function SplashScreen({ onStart, nextTeamNumber }: SplashScreenProps) {
     if (teamName.trim()) onStart(teamName.trim());
   };
 
+  const sceneset = nextTeamNumber % 2 === 0 ? 'B' : 'A';
+
   return (
     <div
       className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: '#0b0e1a' }}
+      style={{ background: '#111827' }}
     >
-      {/* CRT / vignette */}
       <div className="crt-overlay absolute inset-0 z-10" />
       <div className="vignette absolute inset-0 z-10" />
       <div className="scan-line z-20" />
 
-      {/* Grid background */}
+      {/* Grid */}
       <div
-        className="absolute inset-0 z-0 opacity-[0.07]"
+        className="absolute inset-0 z-0 opacity-[0.06]"
         style={{
-          backgroundImage: `linear-gradient(rgba(220,40,40,0.6) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(220,40,40,0.6) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(34,197,94,0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,197,94,0.5) 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
         }}
       />
 
-      <div className="relative z-30 flex flex-col items-center gap-7 px-6 max-w-2xl w-full text-center">
-        {/* Org label */}
+      <div className="relative z-30 flex flex-col items-center gap-6 px-6 max-w-2xl w-full text-center">
+        {/* Org name — GREEN */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="font-display text-base md:text-lg tracking-[0.5em] text-red-600 uppercase"
+          className="font-display text-base md:text-xl tracking-[0.5em] text-green-500 uppercase glow-green"
         >
           Renaissance Occupational Health
         </motion.div>
 
-        {/* Title block */}
+        {/* MER title */}
         <motion.div
           initial={{ opacity: 0, scale: 0.88 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="flex flex-col items-center gap-3"
         >
-          <div className="font-display text-red-500 text-7xl md:text-9xl font-black tracking-tight glow-red flicker leading-none">
+          <div className="font-display text-red-500 text-8xl md:text-[9rem] font-black tracking-tight glow-red flicker leading-none">
             MER
           </div>
           <div className="font-display text-white text-3xl md:text-5xl font-bold tracking-widest leading-tight">
-            5 MINUTES TO SAVE A LIFE
+            3 MINUTES TO SAVE A LIFE
           </div>
-          <div className="font-body text-gray-400 text-base md:text-lg tracking-widest mt-1">
+          <div className="font-body text-gray-400 text-base md:text-lg tracking-widest">
             MEDICAL EMERGENCY RESPONSE — TRAINING SIMULATION
           </div>
         </motion.div>
@@ -67,7 +68,7 @@ export function SplashScreen({ onStart, nextTeamNumber }: SplashScreenProps) {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="w-full h-px bg-linear-to-r from-transparent via-red-600 to-transparent"
+          className="w-full h-px bg-linear-to-r from-transparent via-green-600 to-transparent"
         />
 
         {/* Briefing */}
@@ -77,10 +78,9 @@ export function SplashScreen({ onStart, nextTeamNumber }: SplashScreenProps) {
           transition={{ delay: 0.7 }}
           className="font-body text-gray-300 text-base md:text-lg leading-relaxed max-w-md"
         >
-          A worker has collapsed. You have{' '}
-          <span className="text-red-400 font-bold">5 minutes</span> to make the right decisions.
-          Every second counts. Every choice matters.
-          Wrong decisions cost time — and lives.
+          A worker has collapsed in a remote site. You have{' '}
+          <span className="text-red-400 font-bold">3 minutes</span> to make 10 critical decisions.
+          Every choice matters. Wrong decisions cost time — and lives.
         </motion.p>
 
         {/* Team input */}
@@ -90,14 +90,14 @@ export function SplashScreen({ onStart, nextTeamNumber }: SplashScreenProps) {
           transition={{ delay: 0.9 }}
           className="w-full max-w-sm flex flex-col gap-4"
         >
-          <label className="font-body text-sm text-gray-400 tracking-widest uppercase text-left">
-            Team Name / Number
-            {nextTeamNumber > 1 && (
-              <span className="ml-2 text-red-700 normal-case">
-                (Team {nextTeamNumber} — Scenario {nextTeamNumber % 2 === 0 ? 'B' : 'A'})
-              </span>
-            )}
-          </label>
+          <div className="flex items-center justify-between">
+            <label className="font-body text-sm text-gray-400 tracking-widest uppercase">
+              Team Name / Number
+            </label>
+            <span className="font-body text-xs text-green-600 tracking-widest">
+              SCENARIO {sceneset}
+            </span>
+          </div>
           <input
             type="text"
             value={teamName}
@@ -105,17 +105,17 @@ export function SplashScreen({ onStart, nextTeamNumber }: SplashScreenProps) {
             onKeyDown={(e) => e.key === 'Enter' && handleStart()}
             placeholder="e.g. Team Alpha / Group 3"
             maxLength={40}
-            className="font-body w-full border border-gray-700 text-white px-5 py-4 rounded-lg
-              text-base tracking-wide placeholder-gray-600 focus:outline-none focus:border-red-600
-              focus:ring-1 focus:ring-red-800"
-            style={{ background: '#111520' }}
+            className="font-body w-full border border-gray-700 text-white px-5 py-4 rounded-xl
+              text-lg tracking-wide placeholder-gray-600 focus:outline-none focus:border-green-600
+              focus:ring-1 focus:ring-green-800"
+            style={{ background: '#1c2436' }}
           />
           <motion.button
             onClick={handleStart}
             disabled={!teamName.trim()}
             whileHover={teamName.trim() ? { scale: 1.03 } : {}}
             whileTap={teamName.trim() ? { scale: 0.97 } : {}}
-            className={`font-display w-full py-5 rounded-lg border-2 font-black text-xl tracking-[0.35em] uppercase transition-all
+            className={`font-display w-full py-5 rounded-xl border-2 font-black text-xl tracking-[0.35em] uppercase transition-all
               ${teamName.trim()
                 ? 'border-red-600 text-red-400 hover:bg-red-600 hover:text-black cursor-pointer border-glow-red'
                 : 'border-gray-800 text-gray-700 cursor-not-allowed'
@@ -125,17 +125,17 @@ export function SplashScreen({ onStart, nextTeamNumber }: SplashScreenProps) {
           </motion.button>
         </motion.div>
 
-        {/* Feature icons */}
+        {/* Icons */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.1 }}
-          className="grid grid-cols-3 gap-6 w-full max-w-md mt-1"
+          className="grid grid-cols-3 gap-6 w-full max-w-md"
         >
           {[
-            { icon: '⏱', label: '5-Minute Clock' },
+            { icon: '⏱', label: '3-Minute Clock' },
             { icon: '🫀', label: 'Health Monitor' },
-            { icon: '⚡', label: 'Live Feedback' },
+            { icon: '⚡', label: '10 Decisions' },
           ].map((item) => (
             <div key={item.label} className="flex flex-col items-center gap-1.5">
               <span className="text-3xl">{item.icon}</span>
