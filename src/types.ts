@@ -1,22 +1,14 @@
 export type HealthStatus = 'green' | 'yellow' | 'red';
 export type OutcomeType = 'success' | 'delayed' | 'failed';
-export type SceneId =
-  | 'collapse'
-  | 'response_check'
-  | 'mer_activation'
-  | 'communication'
-  | 'crowd_control'
-  | 'patient_support'
-  | 'outcome';
+export type SceneId = string; // q1–q10, outcome
 
 export interface Decision {
   id: string;
   text: string;
   correct: boolean;
   feedback: string;
-  timePenalty: number;        // seconds to subtract (positive = penalty, negative = bonus)
-  healthDelta: number;        // -2 = worsen 2 levels, +1 = improve, 0 = no change
-  nextScene?: SceneId;
+  timePenalty: number;
+  healthDelta: number;
 }
 
 export interface Scene {
@@ -27,25 +19,26 @@ export interface Scene {
   narrative: string;
   urgencyLabel: string;
   decisions: Decision[];
-  autoAdvanceAfter?: number;  // ms, if no decision needed
   nextScene?: SceneId;
 }
 
 export interface TeamScore {
   teamName: string;
+  sceneset: 'A' | 'B';
   outcome: OutcomeType;
   timeRemaining: number;
   healthAtEnd: HealthStatus;
   correctDecisions: number;
   totalDecisions: number;
+  battleScore: number;
   timestamp: number;
 }
 
 export interface GameState {
-  phase: 'splash' | 'game' | 'outcome';
+  phase: 'splash' | 'game' | 'outcome' | 'comparison';
   currentScene: SceneId;
-  timeRemaining: number;       // seconds
-  health: number;              // 0–100
+  timeRemaining: number;
+  health: number;
   healthStatus: HealthStatus;
   correctCount: number;
   totalDecisions: number;
